@@ -29,8 +29,25 @@ function backClick() {
   }
 }
 
+function addContacts(node) {
+    
+    const contactsList = JSON.parse(loadContacts());
+    for (const person of contactsList) {
+        let li = document.createElement("li");
+        li.innerHTML = `<strong>${person.name}</strong>`;
+        li.dataset.email = person.email;
+        li.dataset.phone = person.phone;
+        node.appendChild(li);
+    }
+}
+
 function init() {
+  const examPerson = document.querySelector('.contacts-list > li');
+  examPerson.parentNode.removeChild(examPerson);
+
   container = document.getElementById('container');
+  const contactsNode = document.getElementsByClassName('contacts-list')[0];
+  addContacts(contactsNode);
   container.querySelector('.list-view').addEventListener('click', contactClick);
   container.querySelector('.back').addEventListener('click', backClick);
 }
