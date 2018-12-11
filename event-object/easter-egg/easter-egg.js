@@ -3,17 +3,17 @@
 const navigate = document.getElementsByTagName('nav')[0];
 
 function showMenu(event) {
-    if (event.ctrlKey &&
-        event.altKey &&
-        event.code === 'KeyT') {
-        navigate.classList.add('visible');
+    if (!event.repeat) {
+        if (event.ctrlKey &&
+            event.altKey &&
+            event.code === 'KeyT') {
+            // navigate.classList.add('visible');
+            navigate.classList.toggle('visible');
+        }
     }
 }
 
 document.addEventListener('keydown', showMenu);
-document.addEventListener('keyup', (event) => {
-        navigate.classList.remove('visible');
-});
 
 const checkValues = ['KeyY', 'KeyT', 'KeyN', 'KeyJ', 'KeyK', 'KeyJ', 'KeyU', 'KeyB', 'KeyZ'];
 let  keydownLetters = [];
