@@ -10,11 +10,9 @@ function upgradeStatus() {
     this.checked = this.checked ? false : true;
     
     const checkedField = this.parentNode;
-    checkedField.parentNode.removeChild(checkedField);
     this.checked ? undone.appendChild(checkedField) : done.appendChild(checkedField);
     
     const inputField = checkedField.querySelector('input');
-    inputField.addEventListener('click', upgradeStatus);
     inputField.checked = this.checked ? false : true;
 }
 

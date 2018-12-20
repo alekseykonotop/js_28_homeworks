@@ -39,34 +39,10 @@ navigateButtons.addEventListener('click', event => {
   });
 
 function updateControls() {
-    prev.disabled = activeElement.previousElementSibling ? false : true;
-    first.disabled = activeElement.previousElementSibling ? false : true;
-    next.disabled = activeElement.nextElementSibling ? false : true;
-    last.disabled = activeElement.nextElementSibling ? false : true;
-    
-    if (!activeElement.nextElementSibling) {
-        if (!next.classList.contains('disabled')) {
-            next.classList.add('disabled');
-            last.classList.add('disabled');
-        }
-    } else {
-        if (next.classList.contains('disabled')) {
-            next.classList.remove('disabled');
-            last.classList.remove('disabled');
-        }
-    }
-
-    if (!activeElement.previousElementSibling) {
-        if (!prev.classList.contains('disabled')) {
-            prev.classList.add('disabled');
-            first.classList.add('disabled');
-        }
-    } else {
-        if (prev.classList.contains('disabled')) {
-            prev.classList.remove('disabled');
-            first.classList.remove('disabled');
-        }
-    }
+    next.classList.toggle('disabled', !activeElement.nextElementSibling);
+    last.classList.toggle('disabled', !activeElement.nextElementSibling);
+    prev.classList.toggle('disabled', !activeElement.previousElementSibling);
+    first.classList.toggle('disabled', !activeElement.previousElementSibling);
 }
 
 updateControls();
