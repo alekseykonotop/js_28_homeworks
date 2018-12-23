@@ -26,6 +26,9 @@ function processAuthorizationForm() {
         if (signInCheckBox.checked) {
             localStorage.email = mainNode.children[0].children[1].value;
             localStorage.password = mainNode.children[1].children[1].value;
+        } else {
+            delete localStorage.email;
+            delete localStorage.password;
         }
     }
     
