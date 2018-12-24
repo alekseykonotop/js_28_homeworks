@@ -1,5 +1,35 @@
 'use strict';
 
+// получение списка доступных размеров 
+const sizeNode = document.querySelector('#sizeSwatch');
+const sizeReq = new XMLHttpRequest();
+sizeReq.addEventListener('load', addSizes);
+sizeReq.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
+sizeReq.send();
+
+function addSizes() {
+    const sizes = JSON.parse(sizeReq.responseText);
+    Array.from(sizes).forEach(size => {
+        const availabilityStatus = size.isAvailable ? 'available' : 'soldout';
+        const inputStatus = size.isAvailable ? '' : 'disabled';
+        sizeNode.innerHTML = sizeNode.innerHTML + `<div data-value="${size.type}" class="swatch-element plain ${size.type} ${availabilityStatus}">
+        <input id="swatch-0-${size.type}" type="radio" name="size" value="${size.type}" ${inputStatus}>
+        <label for="swatch-0-${size.type}">
+          ${size.title}
+          <img class="crossed-out" src="https://neto-api.herokuapp.com/hj/3.3/cart/soldout.png?10994296540668815886">
+        </label>
+        </div>`;
+        // const lastChildForm = sizeNode.lastChild;
+        // console.log('lastChildForm Before', lastChildForm);
+        // if (lastChildForm.classList.contains('available')) {
+        //     console.log('lastChildForm After', lastChildForm.firstElementChild);
+        //     lastChildForm.firstElementChild.addEventListener('click', event => console.log('event', event));
+        // }
+    });
+    // Временно задали значение размера по умолчанию
+    sizeNode.children[2].children[0].checked = true; 
+}
+
 // получение списка доступных цветов
 const colorNode = document.querySelector('#colorSwatch');
 const colorReq = new XMLHttpRequest();
@@ -20,30 +50,7 @@ function addColors() {
         </label>
       </div>`;
     });
-}
-
-// получение списка доступных размеров 
-const sizeNode = document.querySelector('#sizeSwatch');
-const sizeReq = new XMLHttpRequest();
-sizeReq.addEventListener('load', addSizes);
-sizeReq.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
-sizeReq.send();
-
-function addSizes() {
-    const sizes = JSON.parse(sizeReq.responseText);
-    Array.from(sizes).forEach(size => {
-        const availabilityStatus = size.isAvailable ? 'available' : 'soldout';
-        const inputStatus = size.isAvailable ? '' : 'disabled';
-        // console.log('inputStatus', inputStatus);
-        sizeNode.innerHTML = sizeNode.innerHTML + `<div data-value="${size.type}" class="swatch-element plain ${size.type} ${availabilityStatus}">
-        <input id="swatch-0-${size.type}" type="radio" name="size" value="${size.type}" ${inputStatus}>
-        <label for="swatch-0-${size.type}">
-          ${size.title}
-          <img class="crossed-out" src="https://neto-api.herokuapp.com/hj/3.3/cart/soldout.png?10994296540668815886">
-        </label>
-        </div>`;
-
-    });
+    colorNode.children[1].children[1].checked = true; 
 }
 
 
@@ -66,10 +73,44 @@ function addSizes() {
 //     // event.stopPropagation();
 // });
 
+
+
 document.querySelector('#AddToCart').addEventListener('click', (event) => {
     event.preventDefault();
-    const cartForm = document.querySelector('#AddToCartForm');
-    console.log('cartForm', cartForm);
-    const data = new FormData(cartForm);
-    console.log('data:', data)});
+    console.log('Собираем данные формы');
+    let sizeForm = '';
+    for (let node of Array.from(sizeNode.querySelectorAll('div.swatch-element.plain input[name=size]'))) {
+        if (node.checked) {
+            sizeForm = node;
+        }
+    }
+    let colorForm = '';
+    for (let node of Array.from(colorNode.querySelectorAll('div.swatch-element.color input[name=color]'))) {
+        if (node.checked) {
+            colorForm = node;
+        }
+    }
+    console.log('sizeForm', sizeForm);
+    console.log('colorForm', colorForm);
 
+    const cartForm = document.querySelector('#AddToCartForm');
+    console.log('cartForm.product.id:', cartForm.dataset.productId);
+    const data = {};
+    data.size = sizeForm.parentElement.dataset.value;
+    data.color = colorForm.parentElement.dataset.value;
+    data.productId = cartForm.dataset.productId;
+    console.log('data:', data);
+    const dataRequest = new FormData(data);
+    console.log('dataRequest:', dataRequest.keys);
+
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('load', onLoad);
+    xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
+    xhr.send(data);
+
+    function onLoad() {
+        console.log('Данные подгружены');
+        console.log('xhr.responseText', xhr.responseText); // приходит ответ - ОШибка в формате данных. 
+    }
+
+});
