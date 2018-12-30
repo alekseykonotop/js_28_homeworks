@@ -3,7 +3,6 @@
 const canvas = document.querySelector('canvas');
 canvas.style.backgroundColor = 'black';
 const ctx = canvas.getContext('2d');
-ctx.fillStyle = 'white';
 const colors = ["#ffffff", '#ffe9c4', '#d4fbff'];
 
 let stars = [];
@@ -17,7 +16,7 @@ function drawStars() {
         ctx.fill();
         ctx.stroke(); 
 
-    })
+    });
 }
 
 class Star {
@@ -57,7 +56,6 @@ function createNewStars() {
                                  color);
         stars.push(newStar);
     }
-    // console.log('stars', stars);
 
     drawStars();
 }
