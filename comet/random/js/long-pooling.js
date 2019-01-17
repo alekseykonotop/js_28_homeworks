@@ -6,6 +6,7 @@ let isLongFirst = true;
 
 function initLongPooling() {
     const xhr = new XMLHttpRequest();
+    
     xhr.onreadystatechange = function() {
         if (this.readyState != 4) return;
     
