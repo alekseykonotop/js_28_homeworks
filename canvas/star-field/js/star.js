@@ -2,6 +2,11 @@
 
 const canvas = document.querySelector('canvas');
 canvas.style.backgroundColor = 'black';
+
+const sizes = getComputedStyle(canvas);
+canvas.setAttribute('width', sizes.width);
+canvas.setAttribute('height', sizes.height);
+
 const ctx = canvas.getContext('2d');
 const colors = ["#ffffff", '#ffe9c4', '#d4fbff'];
 
