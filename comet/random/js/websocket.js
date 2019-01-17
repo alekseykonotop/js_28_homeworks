@@ -7,17 +7,17 @@ function initWs() {
     
     ws.addEventListener('message', event => {
         if (isFirst) {
-            changeStatus(websocket.children[Number(event.data)]);
+            updateWs(websocket.children[Number(event.data)]);
             isFirst = false;
         } else {
-            changeStatus(websocket.querySelector('.flip-it'));
-            changeStatus(websocket.children[Number(event.data)]);
+            updateWs(websocket.querySelector('.flip-it'));
+            updateWs(websocket.children[Number(event.data)]);
         }
     });
 
-    function changeStatus(node) {
+    function updateWs(node) {
         node.classList.toggle('flip-it');
     }
 }
 
-window.addEventListener('load', initWs, false);
+document.addEventListener('DOMContentLoaded', initWs);

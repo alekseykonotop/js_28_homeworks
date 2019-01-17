@@ -12,24 +12,25 @@ function initLongPooling() {
     
         if (this.status == 202) {
             if (isLongFirst) {
-                    changeStatus(longPooling.children[Number(this.responseText)]);
-                    isLongFirst = false;
-                } else {
-                    changeStatus(longPooling.querySelector('.flip-it'));
-                    changeStatus(longPooling.children[Number(this.responseText)]);
-                }
+                updateLongPooling(longPooling.children[Number(this.responseText)]);
+                isLongFirst = false;
+            } else {
+                updateLongPooling(longPooling.querySelector('.flip-it'));
+                updateLongPooling(longPooling.children[Number(this.responseText)]);
             }
+            initLongPooling();
+        }
 
-        initLongPooling();
+        // initLongPooling();
     }
 
     xhr.open('GET', 'https://neto-api.herokuapp.com/comet/long-pooling', true);
     xhr.send();
 
-    function changeStatus(node) {
+    function updateLongPooling(node) {
         node.classList.toggle('flip-it');
     }
 
 }
 
-window.addEventListener('load', initLongPooling, false);
+document.addEventListener('DOMContentLoaded', initLongPooling);

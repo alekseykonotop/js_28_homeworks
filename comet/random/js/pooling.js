@@ -13,21 +13,21 @@ function initPooling() {
         function updateCard() {
             if (request.status === 200) {
                 if (isFirst) {
-                    changeStatus(pooling.children[Number(request.responseText)]);
+                    updatePooling(pooling.children[Number(request.responseText)]);
                     isFirst = false;
                 } else {
-                    changeStatus(pooling.querySelector('.flip-it'));
-                    changeStatus(pooling.children[Number(request.responseText)]);
+                    updatePooling(pooling.querySelector('.flip-it'));
+                    updatePooling(pooling.children[Number(request.responseText)]);
                 }
             }
         }
 
-        timerId = setTimeout(tick, 5000);
-    }, 5000);
+        timerId = setTimeout(tick, 7000);
+    }, 7000);
 
-    function changeStatus(node) {
+    function updatePooling(node) {
         node.classList.toggle('flip-it');
     }
 }
 
-window.addEventListener('load', initPooling, false);
+document.addEventListener('DOMContentLoaded', initPooling);
