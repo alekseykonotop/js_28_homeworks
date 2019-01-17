@@ -1,3 +1,5 @@
+'use strict';
+
 const ctx = document.getElementById('chart').getContext('2d');
 const realtime = new Chart(ctx).Bar({
   labels: [],
@@ -14,16 +16,15 @@ const realtime = new Chart(ctx).Bar({
 let isFirst = true;
 const ws = new WebSocket('wss://neto-api.herokuapp.com/realtime');
 ws.addEventListener('message', event => {
+  const response = JSON.parse(event.data);
+
   if (isFirst) {
-    event.data
-      .split('\n')
-      .map(line => line.split('|'))
-      .forEach(data => realtime.addData([Number(data[1])], data[0]));
+    response
+      .forEach(data => realtime.addData([data.online], data.time));
 
     isFirst = false;
   } else {
-    const [label, data] = event.data.split('|');
     realtime.removeData();
-    realtime.addData([Number(data)], label);
+    realtime.addData([response.online], response.time);
   }
 });
