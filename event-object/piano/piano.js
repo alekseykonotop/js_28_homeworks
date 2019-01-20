@@ -1,38 +1,40 @@
 'use strict'
- 
+
 const mainFolder = 'sounds';
 const songs = ['first.mp3', 'second.mp3', 'third.mp3', 'fourth.mp3', 'fifth.mp3'];
 
 const piano = document.getElementsByTagName('ul')[0];
 const buttons = piano.getElementsByTagName('li');
 
-function setPathsOfSounds(tone) {
+let soundsTone = 'middle';
+
+function setPathsOfSounds() {
     for (let i = 0; i < buttons.length; i++) {
         const player = buttons[i].getElementsByTagName('audio')[0];
-        player.src = `${mainFolder}\/${tone}\/${songs[i]}`;
+        player.src = `${mainFolder}\/${soundsTone}\/${songs[i]}`;
     }
 }
 
-for (const button of buttons) {
+Array.from(buttons).forEach(button => {
     const player = button.getElementsByTagName('audio')[0];
     button.addEventListener('click', () => {
+        setPathsOfSounds();
         player.play();
-    })
-}
+    });
+});
 
 document.addEventListener('keydown', (event) => {
-
     if (event.shiftKey) {
-        setPathsOfSounds('lower');
+        soundsTone = 'lower';
     }
 
     if (event.altKey) {
-        setPathsOfSounds('higher');
+        soundsTone = 'higher';
     }
 }, false);
 
 document.addEventListener('keyup', (event) => {
-    setPathsOfSounds('middle');
+    soundsTone = 'middle';
 }, false);
 
 
