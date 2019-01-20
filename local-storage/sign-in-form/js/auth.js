@@ -45,19 +45,20 @@ function processAuthorizationForm() {
     function onLoad() {
         const response = JSON.parse(xhr.responseText);
         if (response.error) {
-            outputField.value = response.message;
+            outputField.innerHTML = response.message;
+        } else {
+            if (mainNode.classList.contains('sign-up-htm')) {
+                outputField.innerHTML = `Пользователь ${response.name} успешно зарегистрирован`;
+            }
+            
+            if (mainNode.classList.contains('sign-in-htm')) {
+                outputField.innerHTML = `Пользователь ${response.name} успешно авторизован`;
+            }
         }
-        
-        if (mainNode.classList.contains('sign-up-htm')) {
-            outputField.value = `Пользователь ${response.name} успешно зарегистрирован`;
-        } else if (mainNode.classList.contains('sign-in-htm')) {
-            outputField.value = `Пользователь ${response.name} успешно авторизован`;
-        }
-        
     }
 
     function onError() {
-        console.log('Запрос потерпел крах');
+        console.log(`${error.message}`);
     }
 }
 
