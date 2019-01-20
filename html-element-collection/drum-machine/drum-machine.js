@@ -1,10 +1,21 @@
 'use strict'
 
-const soundBtns = document.getElementsByClassName("drum-kit__drum");
+const drumKit = document.querySelector('.drum-kit');
 
-for (let soundBtn of soundBtns) {
-        soundBtn.onclick = function() {
-            const player = soundBtn.getElementsByTagName('audio')[0];
-            player.play();
-        }
+function playSound(event) {
+    const currentPlayer = drumKit.querySelector('.playNow');
+    const clickBtn = event.target.closest('.drum-kit__drum');
+    
+    if (currentPlayer) {
+        currentPlayer.querySelector('audio').pause();
+        currentPlayer.querySelector('audio').currentTime = 0;
+        currentPlayer.classList.remove('playNow');
+    }
+
+    clickBtn.querySelector('audio').play();
+    clickBtn.classList.add('playNow');
 }
+
+Array.from(drumKit.children).forEach(btn => {
+    btn.addEventListener('click', playSound);
+});
