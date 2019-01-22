@@ -12,26 +12,54 @@ function showComments(list) {
     commentsContainer.style.whiteSpace = 'pre-line';
 }
 
-function createComment(comment) {
-    const newComment = document.createElement('div');
-    newComment.innerHTML = `<div class="comment-wrap">
-    <div class="photo" title="${comment.author.name}">
-        <div class="avatar" style="background-image: url('${comment.author.pic}')"></div>
-    </div>
-    <div class="comment-block">
-        <p class="comment-text"></p>
-        <div class="bottom-comment">
-          <div class="comment-date">${new Date(comment.date).toLocaleString('ru-Ru')}</div>
-            <ul class="comment-actions">
-              <li class="complain">Пожаловаться</li>
-              <li class="reply">Ответить</li>
-            </ul>
-          </div>
-          </div>
-    </div>`;
-    newComment.querySelector('.comment-text').textContent = comment.text;
+function createComment(data) {
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.style.backgroundImage = data.author.pic;
+    
+    const photo = document.createElement("div");
+    photo.className = "photo";
+    photo.setAttribute("title", data.author.name);
+    photo.appendChild(avatar);
 
-    return newComment;
+    const complain = document.createElement("li");
+    complain.className = 'complain';
+    complain.innerText = 'Пожаловаться';
+
+    const reply = document.createElement("li");
+    reply.className = 'reply';
+    reply.innerText = 'Ответить';
+
+    const commentActions = document.createElement("ul");
+    commentActions.className = 'comment-actions';
+    commentActions.appendChild(complain);
+    commentActions.appendChild(reply);
+
+    const commentDate = document.createElement("div");
+    commentDate.className = 'comment-date';
+    const date = new Date(data.date).toLocaleString('ru-Ru');
+    commentDate.innerText = `${date}`;
+
+    const bottomComment = document.createElement("div");
+    bottomComment.className = 'bottom-comment';
+    bottomComment.appendChild(commentDate);
+    bottomComment.appendChild(commentActions);
+
+    const commentText = document.createElement("p");
+    commentText.className = 'comment-text';
+    commentText.textContent = data.text;
+
+    const commentBlock = document.createElement("div");
+    commentBlock.className = 'comment-block';
+    commentBlock.appendChild(commentText);
+    commentBlock.appendChild(bottomComment);
+
+    const commentWrap = document.createElement("div");
+    commentWrap.className = "comment-wrap";
+    commentWrap.appendChild(photo);
+    commentWrap.appendChild(commentBlock);
+
+    return commentWrap;
 }
 
 fetch('https://neto-api.herokuapp.com/comments')
