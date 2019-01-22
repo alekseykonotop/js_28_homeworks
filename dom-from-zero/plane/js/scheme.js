@@ -11,7 +11,7 @@ btnSetFull.addEventListener('click', (event) => {
     event.preventDefault();
     const allSeats = seatMapDiv.querySelectorAll('.seat');
     Array.from(allSeats).forEach(seat => {
-        if (!seat.classList.contains('adult')) {
+        if (!seat.classList.contains('adult') && !seat.classList.contains('half')) {
             seat.classList.add('adult');
         }
     });
@@ -141,14 +141,21 @@ function loadScheme(event) {
 }
 
 seatMapDiv.addEventListener('click', (event) => {
-    const seat = event.target.closest('.seat');
-    if (event.altKey && !seat.classList.contains('adult')) {
-        seat.classList.toggle('half');
+    if (event.target.classList.contains('no-seat')) {
+        return;
     }
-    if (!event.altKey && !seat.classList.contains('half')) {
-        seat.classList.toggle('adult');
+
+    if ((event.target.classList.contains('col-xs-4')) ||
+        (event.target.classList.contains('seat-label'))) {
+        const seat = event.target.closest('.seat');
+        if (event.altKey && !seat.classList.contains('adult')) {
+            seat.classList.toggle('half');
+        }
+        if (!event.altKey && !seat.classList.contains('half')) {
+            seat.classList.toggle('adult');
+        }
+        upgradeStatus();
     }
-    upgradeStatus();
 });
 
 function upgradeStatus() {
