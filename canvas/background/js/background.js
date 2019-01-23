@@ -4,7 +4,6 @@ const canvas = document.querySelector('#wall');
 const sizes = getComputedStyle(canvas);
 canvas.setAttribute('width', sizes.width);
 canvas.setAttribute('height', sizes.height);
-
 const ctx = canvas.getContext('2d');
 
 let objects = [];
@@ -42,7 +41,6 @@ function drawObjects() {
         ctx.strokeStyle = "white";
         ctx.lineWidth = obj.strokeThickness;
         ctx.stroke();
-
     });
 }
 
@@ -83,6 +81,11 @@ class Cross {
     }
 }
 
+function updateDrawing() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawObjects();
+}
+
 function initCreateObjects(from, to) {
     const tmp = randomFromTo(from, to);
     let total;
@@ -90,9 +93,7 @@ function initCreateObjects(from, to) {
 
     for (let i = 0; i < (total); i ++) {
         const x0 = randomFromTo(0, canvas.width);
-        console.log('x0', x0);
         const y0 = randomFromTo(0, canvas.height);
-        console.log('y0', y0);
         const size = getRandomArbitary(0.1, 0.6);
         const typeFunc = randomFromTo(1, 2);
         if (i % 2 == 0) {
@@ -105,8 +106,9 @@ function initCreateObjects(from, to) {
     }
 
     drawObjects();
-    setInterval(drawObjects, 1000);
+    setInterval(updateDrawing, 1000/20);
 }
 
-
-initCreateObjects(50, 200);
+document.addEventListener('DOMContentLoaded', e => {
+    initCreateObjects(50, 200);
+});
