@@ -31,11 +31,13 @@ function drawObjects() {
         if (obj.r) {
             ctx.arc(coordinates.x, coordinates.y, obj.r, 0, Math.PI*2);
         } else {
-        ctx.moveTo(coordinates.x - (obj.side / 2), coordinates.y);
-        ctx.lineTo(coordinates.x + (obj.side / 2), coordinates.y);
-        ctx.moveTo(coordinates.x, coordinates.y - (obj.side / 2));
-        ctx.lineTo(coordinates.x, coordinates.y + (obj.side / 2));
-        ctx.rotate(obj.angle * Math.PI/180 + getRandomArbitary(0, 0,4) - 0.2);
+            ctx.save();
+            ctx.moveTo(coordinates.x - (obj.side / 2), coordinates.y);
+            ctx.lineTo(coordinates.x + (obj.side / 2), coordinates.y);
+            ctx.moveTo(coordinates.x, coordinates.y - (obj.side / 2));
+            ctx.lineTo(coordinates.x, coordinates.y + (obj.side / 2));
+            ctx.rotate(obj.angle * Math.PI/180 + getRandomArbitary(0, 0,4) - 0.2);
+            ctx.restore();
 
         }
         ctx.strokeStyle = "white";
@@ -86,7 +88,7 @@ function updateDrawing() {
     drawObjects();
 }
 
-function initCreateObjects(from, to) {
+function init(from, to) {
     const tmp = randomFromTo(from, to);
     let total;
     (tmp % 2 == 0) ? total = tmp: total = tmp + 1;
@@ -110,5 +112,5 @@ function initCreateObjects(from, to) {
 }
 
 document.addEventListener('DOMContentLoaded', e => {
-    initCreateObjects(50, 200);
+    init(50, 200);
 });
