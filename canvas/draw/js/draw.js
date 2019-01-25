@@ -5,8 +5,8 @@ const ctx = canvas.getContext("2d");
 let curves = [];
 let drawing = false;
 let needsRepaint = false;
-let isColorToneIncreases = true; // увеличить цветовой тон true/false
-let isBrashRadiusIncreases = false; //увеличить размера пера true/false
+let isColorToneIncreases = true;
+let isBrashRadiusIncreases = false;
 let colorTone = 0;
 let currRadius = 100;
 
@@ -15,7 +15,6 @@ function setCanvasLinearDimentions() {
     canvas.height = document.documentElement.clientHeight;
 }
 
-// CURVES AND FIGURES
 function circle(data) {
     ctx.beginPath();
     ctx.arc(...data.point, data.radius / 2, 0, 2 * Math.PI);
@@ -30,9 +29,14 @@ function smoothCurveBetween (p1, p2) {
     const gradient = ctx.createLinearGradient(...p1.point, ...p2.point);
     gradient.addColorStop(0, p1.color);
     gradient.addColorStop(0, p2.color);
-    const cp = p1.point.map((coord, idx) => (coord + p2.point[idx]) / 2);
-    ctx.quadraticCurveTo(...p1.point, ...cp);
-    ctx.lineWidth = p2.radius;
+    ctx.moveTo(...p1.point);
+    const xc = (p1.point[0] + p2.point[0]) / 2;
+    const yc = (p1.point[1] + p2.point[1]) / 2;
+    
+    ctx.lineTo(xc, yc);
+    ctx.lineTo(...p2.point);
+    ctx.quadraticCurveTo(...p1.point, xc, yc);
+    ctx.lineWidth = (p1.radius + p2.radius) / 2;
     
     ctx.fillStyle = gradient;
     ctx.strokeStyle = gradient;
@@ -49,14 +53,13 @@ function smoothCurve(curve) {
 
     ctx.moveTo(...curve[0].point);
 
-    for (let i = 1; i < curve.length - 1; i++) {
+    for (let i = 1; i < curve.length - 2; i++) {
         smoothCurveBetween(curve[i], curve[i + 1]);
     }
 
     ctx.stroke();
     ctx.closePath();
 }
-
 
 function updateColor() {
     if (isColorToneIncreases) {
@@ -86,7 +89,6 @@ function updateRadius() {
     }
 }
 
-// rendering
 function repaint () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -123,7 +125,6 @@ function getPoint(e) {
     }
 }
 
-// events
 canvas.addEventListener("mousedown", (evt) => {
     drawing = true;
     (evt.shiftKey) ? isColorToneIncreases = false : isColorToneIncreases = true;
@@ -141,7 +142,6 @@ canvas.addEventListener("mouseleave", (evt) => {
 
 canvas.addEventListener("mousemove", (evt) => {
     if (drawing) {
-        const point = [evt.offsetX, evt.offsetY];
         curves[curves.length - 1].push(getPoint(evt));
         needsRepaint = true;
     }
