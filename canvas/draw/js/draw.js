@@ -24,7 +24,7 @@ function circle(data) {
 
 }
 
-function smoothCurveBetween (p1, p2) {
+function smoothCurveBetween(p1, p2) {
     ctx.beginPath();
     const gradient = ctx.createLinearGradient(...p1.point, ...p2.point);
     gradient.addColorStop(0, p1.color);
@@ -32,7 +32,7 @@ function smoothCurveBetween (p1, p2) {
     ctx.moveTo(...p1.point);
     const xc = (p1.point[0] + p2.point[0]) / 2;
     const yc = (p1.point[1] + p2.point[1]) / 2;
-    
+
     ctx.quadraticCurveTo(xc, yc, ...p2.point);
     ctx.lineWidth = (p1.radius + p2.radius) / 2;
     
